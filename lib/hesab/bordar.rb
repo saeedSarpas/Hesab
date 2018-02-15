@@ -44,4 +44,18 @@ class Bordar
     l, d = @B[:l].clone, @B[:d].clone
     Bordar.new l, d
   end
+
+
+  # Multiplying by a scalar or an Adad
+  #
+  # === Attributes
+  # +m+:: multiplicand of type Adad or Numeric
+  def *(m)
+    raise ArgumentError unless m.is_a?(Numeric) or m.is_a?(Adad)
+
+    bordar = self.clone
+    bordar.instance_variable_get(:@B)[:l] *= m
+
+    return bordar
+  end
 end

@@ -40,4 +40,19 @@ describe(Bordar) do
     expect(new_bordar.l.v).to eq(1.23)
     expect(new_bordar.d).to eq([0, 1])
   end
+
+  it 'is able to be multiplied by a number' do
+    bordar = described_class.new 1.23, [0, 1]
+
+    expect((bordar * 2.34).l.v).to eq(1.23 * 2.34)
+    expect((bordar * 2.34).d).to eq([0, 1])
+  end
+
+  it 'is able to be multiplied by a number' do
+    bordar = described_class.new 1.23, [0, 1]
+    adad = Adad.new 2.34
+
+    expect((bordar * adad).l.v).to eq(1.23 * 2.34)
+    expect((bordar * adad).d).to eq([0, 1])
+  end
 end

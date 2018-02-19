@@ -100,7 +100,7 @@ describe(Adad) do
     expect((adad1 - adad2).e).to eq([0.1 + f * 0.3, 0.2 + f * 0.4])
   end
 
-  it 'is able to be multiplied by a number' do
+  it 'can be multiplied by a number' do
     adad = described_class.new 1.23, [0.1, 0.2], :km, 1, :s, -1
 
     expect((adad * 2).v).to eq(1.23 * 2)
@@ -108,7 +108,7 @@ describe(Adad) do
     expect((adad * 2).e).to eq([0.2, 0.4])
   end
 
-  it 'is able to be multiplied by an adad' do
+  it 'can be multiplied by an adad' do
     adad1 = described_class.new 1.23, [0.1, 0.2], :km, 1, :s, -1
     adad2 = described_class.new 2.34, [0.3, 0.4], :s, 1
 

@@ -18,6 +18,7 @@ class Adad
     end
 
     @A = { v: value, u: { L: [], M: [], T: [], Th: [], N: [] }, e: [0.0, 0.0]}
+    @symb = nil
 
     unless epsilon.nil?
       case epsilon.length
@@ -244,6 +245,14 @@ class Adad
     end
 
     return adad
+  end
+
+  # Generating a symbol version of the adad
+  def symb
+    return @symb unless @symb.nil?
+
+    @symb = Formul.new self
+    @symb
   end
 
   private

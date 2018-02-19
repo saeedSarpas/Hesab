@@ -17,6 +17,7 @@ class Bordar
       l: length.is_a?(Adad) ? length : Adad.new(length),
       d: direction.is_a?(Numeric) ? [direction] : direction
     }
+    @symb = nil
   end
 
 
@@ -57,5 +58,13 @@ class Bordar
     bordar.instance_variable_get(:@B)[:l] *= m
 
     return bordar
+  end
+
+  # Generating a symbol version of the bordar
+  def symb
+    return @symb unless @symb.nil?
+
+    @symb = Formul.new self
+    @symb
   end
 end

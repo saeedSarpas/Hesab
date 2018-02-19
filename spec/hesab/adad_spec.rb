@@ -183,4 +183,12 @@ describe(Adad) do
     expect(reverted_a[:u][:T]).to eq([Unit::gen_unit(:one, :s, -2)])
     expect(reverted.v).to eq(1.0)
   end
+
+  it 'must be able to generate a symbol based on itself' do
+    adad = described_class.new 1.23, :km, 1
+    symb = adad.symb
+
+    expect(symb).to be_a(Formul)
+    expect(adad.symb).to be(symb)
+  end
 end

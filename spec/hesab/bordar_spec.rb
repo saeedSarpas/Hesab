@@ -55,4 +55,12 @@ describe(Bordar) do
     expect((bordar * adad).l.v).to eq(1.23 * 2.34)
     expect((bordar * adad).d).to eq([0, 1])
   end
+
+  it 'must be able to generate a symbol based on itself' do
+    bordar = described_class.new 1.23, [0, 1]
+    symb = bordar.symb
+
+    expect(symb).to be_a(Formul)
+    expect(bordar.symb).to be(symb)
+  end
 end

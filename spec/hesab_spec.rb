@@ -11,3 +11,9 @@ describe(Bordar) do
     expect(described_class.new 1.23, [1]).to be_a(Bordar)
   end
 end
+
+describe(Formul) do
+  it 'is accessible' do
+    expect(described_class.new Adad.new(1.23)).to be_a(Formul)
+  end
+end

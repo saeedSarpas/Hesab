@@ -1,0 +1,10 @@
+name: hesab
+version: 0.1.0
+
+authors:
+  - Saeed Sarpas <saeed.sarpas@phys.ethz.ch>
+  - Mohammad Sadegh Khoeini(MSK) <mskco.tp@gmail.com>
+
+crystal: 0.24.1
+
+license: GPLv3

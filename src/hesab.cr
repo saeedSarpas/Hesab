@@ -1,5 +1,3 @@
-# Hesab
-
-require_relative './hesab/adad.rb'
-require_relative './hesab/bordar.rb'
-require_relative './hesab/formul.rb'
+require "./hesab/adad"
+require "./hesab/bordar"
+require "./hesab/formul"

@@ -1,8 +1,6 @@
-require_relative './adad.rb'
-
+require "./adad"
 
 class Bordar
-
   # Constructing a Border::Generate instance
   #
   # ==== Attributes
@@ -15,11 +13,10 @@ class Bordar
   def initialize(length, direction)
     @B = {
       l: length.is_a?(Adad) ? length : Adad.new(length),
-      d: direction.is_a?(Numeric) ? [direction] : direction
+      d: direction.is_a?(Numeric) ? [direction] : direction,
     }
     @symb = nil
   end
-
 
   # Length of the vector (Adad)
   def length
@@ -27,9 +24,8 @@ class Bordar
   end
 
   def l
-    self.length()
+    self.length
   end
-
 
   # Direction of the vector (Array)
   def direction
@@ -37,25 +33,23 @@ class Bordar
   end
 
   def d
-    self.direction()
+    self.direction
   end
-
 
   def clone
     l, d = @B[:l].clone, @B[:d].clone
     Bordar.new l, d
   end
 
-
   # Multiplying by a scalar or an Adad
   #
   # === Attributes
   # +m+:: multiplicand of type Adad or Numeric
   def *(m)
-    raise ArgumentError unless m.is_a?(Numeric) or m.is_a?(Adad)
+    raise ArgumentError unless m.is_a?(Numeric) || m.is_a?(Adad)
 
     bordar = self.clone
-    bordar.instance_variable_get(:@B)[:l] *= m
+    # bordar.instance_variable_get(:@B)[:l] *= m
 
     return bordar
   end

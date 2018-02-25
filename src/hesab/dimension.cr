@@ -1,3 +1,3 @@
 enum Dimension
-  Dummy
+  L, M, T, I, Theta, N, J
 end

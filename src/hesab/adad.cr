@@ -11,32 +11,39 @@ class Adad
   # ==== Examples
   # > H = Adad.new 67.48, [0.98], :km, 1, :Mpc, -1, :s, -1
   # => #<Adad:...>
-  def initialize(value, epsilon = nil, *units_and_powers)
+  def initialize(value : Float64, epsilon = nil, *units_and_powers)
     if epsilon.is_a?(Symbol)
       return initialize(value, nil, epsilon, *units_and_powers)
     end
 
-    @A = {v: value, u: {L: ([] of Object),
-                        M: ([] of Object),
-                        T: ([] of Object),
-                        Th: ([] of Object),
-                        N: ([] of Object)}, e: [0.0, 0.0]}
+    @A = {
+      :v => value,
+      :u => {
+        :L  => ([] of Float64),
+        :M  => ([] of Float64),
+        :T  => ([] of Float64),
+        :Th => ([] of Float64),
+        :N  => ([] of Float64),
+      },
+      :e => [0.0, 0.0],
+    }
+
     @symb = nil
 
     unless epsilon.nil?
       case epsilon.length
       when 0
-        @A[:e] = [0, 0]
+        @A[:e] = [0.0, 0.0]
       when 1
         @A[:e] = [epsilon[0], epsilon[0]]
       when 2
         @A[:e] = epsilon
       else
-        raise ArgumentError, "Don't know how to handle uncertainties"
+        raise ArgumentError.new "Don't know how to handle uncertainties"
       end
     end
 
-    units_and_powers.each_slice(2) do |unit, pow|
+    units_and_powers.each_slice(2) do |(unit, pow)|
       prfx, symb = Unit.check_for_prfx unit
 
       Unit::Dim.each do |dim|

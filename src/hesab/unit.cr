@@ -17,14 +17,13 @@ module Unit
   # +unit+:: a symbol specifying a simple, derived or compound unit,
   #     e.g. :m, :pc, :kHz, etc.
   def check_for_prfx(unit_sym)
-    return :one, unit_sym if Unit::DERIVED.key? unit_sym
-    Unit::Dim.each { |d| return :one, unit_sym if Unit::UNITS[d].key? unit_sym }
+    return :one, unit_sym if Unit::DERIVED.has_key? unit_sym
+    Unit::Dim.each { |d| return :one, unit_sym if Unit::UNITS[d].has_key? unit_sym }
 
     Unit::PRFX.keys.each do |p|
       u = unit_sym.to_s
-      if u.start_with? p.to_s
-        u[p.to_s] = ""
-        return p, u.to_sym
+      if u.starts_with? p.to_s
+        return p, u.lchop(p.to_s)
       end
     end
   end

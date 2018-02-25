@@ -1,0 +1,3 @@
+enum Dimension
+  Dummy
+end

@@ -1,4 +1,6 @@
 module Unit
+  extend self
+
   # Generate a unit
   #
   # === Attributes

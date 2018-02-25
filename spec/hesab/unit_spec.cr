@@ -1,8 +1,8 @@
 require "../spec_helper"
 
 describe(Unit) do
-  pending "generates a unit out of a given prefix, symbol and power" do
-    expect(Unit.gen_unit :one, :m, 1).to eq({prfx: :one, symb: :m, pow: 1})
+  it "generates a unit out of a given prefix, symbol and power" do
+    Unit.gen_unit(:one, :m, 1).should eq({prfx: :one, symb: :m, pow: 1})
   end
 
   pending "checks for prefixes of a given simple, derived or compount unit" do

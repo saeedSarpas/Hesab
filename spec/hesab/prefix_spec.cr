@@ -2,6 +2,14 @@ require "../spec_helper"
 
 describe Prefix do
   context Prefix::PREFIX do
+    it "should have yocto" do
+      Prefix::PREFIX[:y].should eq(1e-24)
+    end
+
+    it "should have zepto" do
+      Prefix::PREFIX[:z].should eq(1e-21)
+    end
+
     it "should have atto" do
       Prefix::PREFIX[:a].should eq(1e-18)
     end
@@ -68,6 +76,14 @@ describe Prefix do
 
     it "should have exa" do
       Prefix::PREFIX[:E].should eq(1e18)
+    end
+
+    it "should have zetta" do
+      Prefix::PREFIX[:Z].should eq(1e21)
+    end
+
+    it "should have yotta" do
+      Prefix::PREFIX[:Y].should eq(1e24)
     end
   end
 end

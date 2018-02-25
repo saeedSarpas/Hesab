@@ -1,5 +1,7 @@
 class Prefix
   PREFIX = {
+    y:   1e-24,
+    z:   1e-21,
     a:   1e-18,
     f:   1e-15,
     p:   1e-12,
@@ -17,5 +19,7 @@ class Prefix
     T:   1e12,
     P:   1e15,
     E:   1e18,
+    Z:   1e21,
+    Y:   1e24,
   }
 end

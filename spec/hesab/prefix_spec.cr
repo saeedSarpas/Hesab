@@ -1,89 +1,129 @@
 require "../spec_helper"
 
 describe Prefix do
-  context Prefix::PREFIX do
+  context "Struct" do
+    it "should be constructible with value, and symbol" do
+      Prefix.new(:k, 1e3).should be_a(Prefix)
+      Prefix.new(value: 1e3, symbol: :k).should be_a(Prefix)
+    end
+
+    it "should be a struct" do
+      Prefix.new(:k, 1e3).is_a?(Struct).should be_true
+    end
+
+    it "should expose symbol" do
+      Prefix.new(:k, 1e3).symbol.should eq(:k)
+    end
+
+    it "should expose value" do
+      Prefix.new(:k, 1e3).value.should eq(1e3)
+    end
+  end
+
+  context "Constants" do
     it "should have yocto" do
-      Prefix::PREFIX[:y].should eq(1e-24)
+      Prefix::Yocto.symbol.should eq(:y)
+      Prefix::Yocto.value.should eq(1e-24)
     end
 
     it "should have zepto" do
-      Prefix::PREFIX[:z].should eq(1e-21)
+      Prefix::Zepto.symbol.should eq(:z)
+      Prefix::Zepto.value.should eq(1e-21)
     end
 
     it "should have atto" do
-      Prefix::PREFIX[:a].should eq(1e-18)
+      Prefix::Atto.symbol.should eq(:a)
+      Prefix::Atto.value.should eq(1e-18)
     end
 
     it "should have femto" do
-      Prefix::PREFIX[:f].should eq(1e-15)
+      Prefix::Femto.symbol.should eq(:f)
+      Prefix::Femto.value.should eq(1e-15)
     end
 
     it "should have pico" do
-      Prefix::PREFIX[:p].should eq(1e-12)
+      Prefix::Pico.symbol.should eq(:p)
+      Prefix::Pico.value.should eq(1e-12)
     end
 
     it "should have nano" do
-      Prefix::PREFIX[:n].should eq(1e-9)
+      Prefix::Nano.symbol.should eq(:n)
+      Prefix::Nano.value.should eq(1e-9)
     end
 
     it "should have micro" do
-      Prefix::PREFIX[:u].should eq(1e-6)
+      Prefix::Micro.symbol.should eq(:u)
+      Prefix::Micro.value.should eq(1e-6)
     end
 
     it "should have milli" do
-      Prefix::PREFIX[:m].should eq(1e-3)
+      Prefix::Milli.symbol.should eq(:m)
+      Prefix::Milli.value.should eq(1e-3)
     end
 
     it "should have centi" do
-      Prefix::PREFIX[:c].should eq(1e-2)
+      Prefix::Centi.symbol.should eq(:c)
+      Prefix::Centi.value.should eq(1e-2)
     end
 
     it "should have deci" do
-      Prefix::PREFIX[:d].should eq(1e-1)
+      Prefix::Deci.symbol.should eq(:d)
+      Prefix::Deci.value.should eq(1e-1)
     end
 
     it "should have one" do
-      Prefix::PREFIX[:one].should eq(1e0)
+      Prefix::One.symbol.should eq(:one)
+      Prefix::One.value.should eq(1e0)
     end
 
     it "should have deca" do
-      Prefix::PREFIX[:da].should eq(1e1)
+      Prefix::Deca.symbol.should eq(:da)
+      Prefix::Deca.value.should eq(1e1)
     end
 
     it "should have hecto" do
-      Prefix::PREFIX[:h].should eq(1e2)
+      Prefix::Hecto.symbol.should eq(:h)
+      Prefix::Hecto.value.should eq(1e2)
     end
 
     it "should have kilo" do
-      Prefix::PREFIX[:k].should eq(1e3)
+      Prefix::Kilo.symbol.should eq(:k)
+      Prefix::Kilo.value.should eq(1e3)
     end
 
     it "should have mega" do
-      Prefix::PREFIX[:M].should eq(1e6)
+      Prefix::Mega.symbol.should eq(:M)
+      Prefix::Mega.value.should eq(1e6)
     end
 
     it "should have giga" do
-      Prefix::PREFIX[:G].should eq(1e9)
+      Prefix::Giga.symbol.should eq(:G)
+      Prefix::Giga.value.should eq(1e9)
     end
 
     it "should have tera" do
-      Prefix::PREFIX[:T].should eq(1e12)
+      Prefix::Tera.symbol.should eq(:T)
+      Prefix::Tera.value.should eq(1e12)
     end
 
     it "should have peta" do
-      Prefix::PREFIX[:P].should eq(1e15)
+      Prefix::Peta.symbol.should eq(:P)
+      Prefix::Peta.value.should eq(1e15)
     end
 
     it "should have exa" do
-      Prefix::PREFIX[:E].should eq(1e18)
+      Prefix::Exa.symbol.should eq(:E)
+      Prefix::Exa.value.should eq(1e18)
     end
 
     it "should have zetta" do
-      Prefix::PREFIX[:Z].should eq(1e21)
+      Prefix::Zetta.symbol.should eq(:Z)
+      Prefix::Zetta.value.should eq(1e21)
     end
 
     it "should have yotta" do
-      Prefix::PREFIX[:Y].should eq(1e24)
+      Prefix::Yotta.symbol.should eq(:Y)
+      Prefix::Yotta.value.should eq(1e24)
     end
   end
 end

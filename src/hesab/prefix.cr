@@ -25,4 +25,13 @@ struct Prefix
   Exa   = self.new :E, 1e18
   Zetta = self.new :Z, 1e21
   Yotta = self.new :Y, 1e24
+
+  def self.consts
+    {{ @type.constants.map { |c| @type.constant(c) }
+                      .select { |c| c.class_name == "Call" &&
+         c.receiver.id == "self" &&
+         c.name == "new" } }}
+  end
+
+  CONSTS = self.consts.map { |c| {c.symbol, c} }.to_h
 end

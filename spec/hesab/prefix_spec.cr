@@ -126,4 +126,15 @@ describe Prefix do
       Prefix::Yotta.value.should eq(1e24)
     end
   end
+
+  context Prefix::CONSTS do
+    it "should be a Hash" do
+      Prefix::CONSTS.should be_a(Hash(Symbol, Prefix))
+    end
+
+    it "should contain constants" do
+      Prefix::CONSTS[:k]?.should eq(Prefix::Kilo)
+      Prefix::CONSTS[:Y]?.should eq(Prefix::Yotta)
+    end
+  end
 end

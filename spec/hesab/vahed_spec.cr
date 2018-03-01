@@ -6,6 +6,12 @@ describe Vahed do
     Vahed.new(symbol: :J, abaad: {Abaad::Mass => 1, Abaad::Length => 2, Abaad::Time => -2}).should be_a(Vahed)
   end
 
+  it "should be constructible from the symbol of a abaad" do
+    Vahed.new(:g, :L).should be_a(Vahed)
+    Vahed.new(symbol: :g, abaad: :L).should be_a(Vahed)
+    Vahed.new(:g, :L).abaad.should eq({Abaad::Length => 1})
+  end
+
   it "should be a struct" do
     Vahed.new(:g, {Abaad::Mass => 1}).is_a?(Struct).should be_true
   end

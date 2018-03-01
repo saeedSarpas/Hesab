@@ -1,4 +1,4 @@
-struct Vahed
+struct VahedPaye
   property symbol, abaad
 
   def initialize(@symbol : Symbol, @abaad : Hash(Abaad, Int32))

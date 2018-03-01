@@ -28,4 +28,14 @@ describe Abaad do
   it "should contain Luminous dimension" do
     Abaad.names.should contain("J")
   end
+
+  it "should be constructible from symbol" do
+    Abaad.from_sym(:L).should eq(Abaad::Length)
+    Abaad.from_sym(:M).should eq(Abaad::Mass)
+    Abaad.from_sym(:T).should eq(Abaad::Time)
+    Abaad.from_sym(:I).should eq(Abaad::I)
+    Abaad.from_sym(:N).should eq(Abaad::N)
+    Abaad.from_sym(:J).should eq(Abaad::J)
+    Abaad.from_sym(:Th).should eq(Abaad::Theta)
+  end
 end

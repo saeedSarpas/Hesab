@@ -1,4 +1,4 @@
-struct Prefix
+struct Pishvand
   property symbol, value
 
   def initialize(@symbol : Symbol, @value : Float64)

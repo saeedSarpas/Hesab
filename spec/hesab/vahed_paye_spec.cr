@@ -12,6 +12,18 @@ describe VahedPaye do
     VahedPaye.new(:g, :L).abaad.should eq({Abaad::Length => 1})
   end
 
+  it "should be constructible from a dictionary of abaad" do
+    # It seems crystal compiler can't handle named params with capital letters for now
+    abaad = {M: 1, L: 2, T: -2}
+    joule = VahedPaye.new :J, **abaad
+    joule.should be_a(VahedPaye)
+    joule.abaad.should eq({
+      Abaad::Mass   => 1,
+      Abaad::Length => 2,
+      Abaad::Time   => -2,
+    })
+  end
+
   it "should be a struct" do
     VahedPaye.new(:g, {Abaad::Mass => 1}).is_a?(Struct).should be_true
   end

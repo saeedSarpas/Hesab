@@ -41,8 +41,11 @@ struct Pishvand
 
   def self.get_prefix(sym : Symbol)
     sym_s = sym.to_s
-    CONSTS_KEYS_STR.index { |c| sym_s.starts_with? c }.try do |idx|
-      {CONSTS[CONSTS_KEYS[idx]], sym_s.lchop(CONSTS_KEYS_STR[idx])}
+    CONSTS_KEYS_STR.each_with_index do |c, i|
+      if sym_s.starts_with?(c) && (c != "d" || !sym_s.starts_with?("da")) && sym_s != c
+        return {CONSTS[CONSTS_KEYS[i]], sym_s.lchop(CONSTS_KEYS_STR[i])}
+      end
     end
+    raise ArgumentError.new "Prefix not found!"
   end
 end

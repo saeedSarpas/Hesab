@@ -141,6 +141,9 @@ describe Pishvand do
   context "Methods" do
     it "should get the prefix" do
       Pishvand.get_prefix(:kg).should eq({Pishvand::Kilo, "g"})
+      Pishvand.get_prefix(:dapc).should eq({Pishvand::Deca, "pc"})
+      expect_raises(Exception) { Pishvand.get_prefix(:bbb) }
+      expect_raises(Exception) { Pishvand.get_prefix(:k) }
     end
   end
 end

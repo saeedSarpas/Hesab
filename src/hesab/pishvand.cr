@@ -27,12 +27,12 @@ struct Pishvand
     Zetta = Pishvand.new :Z, 1e21
     Yotta = Pishvand.new :Y, 1e24
 
-    def self.consts
+    def self.constants
       {{ @type.constants }}
     end
   end
 
   include Constants
 
-  CONSTS = Constants.consts.map { |c| {c.symbol, c} }.to_h
+  CONSTS = Constants.constants.map { |c| {c.symbol, c} }.to_h
 end

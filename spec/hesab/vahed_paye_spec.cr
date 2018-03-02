@@ -68,5 +68,13 @@ describe VahedPaye do
      :pc, :Msun, :yr].each do |u|
       VahedPaye::CONSTS[u].should be_a(VahedPaye)
     end
+
+    it "should expose constants by string" do
+      ["m", "g", "s", "A", "K", "mol", "cd", "Hz", "rad", "sr",
+       "N", "Pa", "J", "W", "C", "V", "F", "omega", "T", "lx",
+       "pc", "Msun", "yr"].each do |u|
+        VahedPaye::CONSTS_STR[u].should be_a(VahedPaye)
+      end
+    end
   end
 end

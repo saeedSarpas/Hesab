@@ -53,5 +53,6 @@ struct VahedPaye
 
   include Constants
 
-  CONSTS = Constants.constants.map { |c| {c.symbol, c} }.to_h
+  CONSTS     = Constants.constants.map { |c| {c.symbol, c} }.to_h
+  CONSTS_STR = Constants.constants.map { |c| {c.symbol.to_s, c} }.to_h
 end

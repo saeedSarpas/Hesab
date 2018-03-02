@@ -48,4 +48,8 @@ struct Pishvand
     end
     raise ArgumentError.new "Prefix not found!"
   end
+
+  def one?
+    @value == 1.0
+  end
 end

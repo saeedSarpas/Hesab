@@ -145,5 +145,10 @@ describe Pishvand do
       expect_raises(Exception) { Pishvand.get_prefix(:bbb) }
       expect_raises(Exception) { Pishvand.get_prefix(:k) }
     end
+
+    it "should have one?" do
+      Pishvand::One.one?.should be_true
+      Pishvand::Kilo.one?.should be_false
+    end
   end
 end

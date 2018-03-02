@@ -6,12 +6,12 @@ struct JomleVahed
     @vahed = vahed.is_a?(Symbol) ? VahedPaye::CONSTS[vahed] : vahed
   end
 
-  def self.new(vahed : VahedPaye | Symbol)
+  def self.new(vahed : VahedPaye | Symbol, power : Int32 = 1)
     if vahed.is_a?(VahedPaye) || VahedPaye::CONSTS.has_key?(vahed)
-      self.new Pishvand::One, vahed
+      self.new Pishvand::One, vahed, power
     else
       pish, v = Pishvand.get_prefix(vahed).not_nil!
-      self.new pish, VahedPaye::CONSTS_STR[v]
+      self.new pish, VahedPaye::CONSTS_STR[v], power
     end
   end
 end

@@ -53,4 +53,10 @@ describe JomleVahed do
     JomleVahed.new(:kg).should eq(JomleVahed.new Pishvand::Kilo, VahedPaye::Gram, 1)
     JomleVahed.new(:daHz).should eq(JomleVahed.new Pishvand::Deca, VahedPaye::Hertz, 1)
   end
+
+  it "should be constructible from unit symbol and power" do
+    JomleVahed.new(:kg, 2).should eq(JomleVahed.new Pishvand::Kilo, VahedPaye::Gram, 2)
+    JomleVahed.new(:pc, 3).should eq(JomleVahed.new Pishvand::One, VahedPaye::Parsec, 3)
+    JomleVahed.new(:daHz, 4).should eq(JomleVahed.new Pishvand::Deca, VahedPaye::Hertz, 4)
+  end
 end

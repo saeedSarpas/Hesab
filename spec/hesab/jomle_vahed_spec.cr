@@ -22,53 +22,35 @@ describe JomleVahed do
     JomleVahed.new(Pishvand::Kilo, VahedPaye::Gram, 1).power.should eq(1)
   end
 
-  pending "should be constructibe from base unit symbol" do
-    m = JomleVahed.from_sym(:m)
-    m.should be_a(JomleVahed)
-    m.prefix.should eq(Pishvand::One)
-    m.symbol.should eq(:m)
-    m.power.should eq(1)
-
-    pc = JomleVahed.from_sym(:pc)
-    pc.should be_a(JomleVahed)
-    pc.prefix.should eq(Pishvand::One)
-    pc.symbol.should eq(:pc)
-    pc.power.should eq(1)
-  end
-
-  pending "should be constructible from derived unit symbol" do
-    j = JomleVahed.from_sym(:J)
-    j.should be_a(JomleVahed)
-    j.prefix.should eq(Pishvand::One)
-    j.symbol.should eq(:J)
-    j.power.should eq(1)
-
-    hz = JomleVahed.from_sym(:Hz)
-    hz.should be_a(JomleVahed)
-    hz.prefix.should eq(Pishvand::One)
-    hz.symbol.should eq(:Hz)
-    hz.power.should eq(1)
-  end
-
-  pending "should be constructible from compound unit symbol" do
-    kg = JomleVahed.from_sym(:kg)
+  it "should be constructible from prefix and vahed" do
+    kg = JomleVahed.new(Pishvand::Kilo, VahedPaye::Gram)
     kg.should be_a(JomleVahed)
-    kg.prefix.should eq(Pishvand::Kilo)
-    kg.symbol.should eq(:g)
     kg.power.should eq(1)
-
-    dahz = JomleVahed.from_sym(:daHz)
-    dahz.should be_a(JomleVahed)
-    dahz.prefix.should eq(Pishvand::Deca)
-    dahz.symbol.should eq(:Hz)
-    dahz.power.should eq(1)
   end
 
-  pending "should differentiate between prefix and similar units" do
-    pc = JomleVahed.from_sym :pc
-    pc.should be_a(JomleVahed)
-    pc.prefix.should eq(Pishvand::One)
-    pc.symbol.should eq(:pc)
-    pc.power.should eq(1)
+  it "should be constructible from the symbols of prefix and vahed" do
+    kg = JomleVahed.new :k, :g
+    kg2 = JomleVahed.new :k, :g, 1
+    kg3 = JomleVahed.new :k, VahedPaye::Gram
+    kg4 = JomleVahed.new Pishvand::Kilo, :g
+
+    (kg == kg2).should be_true
+    (kg == kg3).should be_true
+    (kg == kg4).should be_true
+    kg.should be_a(JomleVahed)
+  end
+
+  it "should be constructible from vahed" do
+    JomleVahed.new(VahedPaye::Gram).should eq(JomleVahed.new Pishvand::One, VahedPaye::Gram)
+  end
+
+  it "should be constructibe from base unit symbol" do
+    JomleVahed.new(:m).should eq(JomleVahed.new Pishvand::One, VahedPaye::Metre, 1)
+    JomleVahed.new(:pc).should eq(JomleVahed.new Pishvand::One, VahedPaye::Parsec, 1)
+  end
+
+  it "should be constructible from compound unit symbol" do
+    JomleVahed.new(:kg).should eq(JomleVahed.new Pishvand::Kilo, VahedPaye::Gram, 1)
+    JomleVahed.new(:daHz).should eq(JomleVahed.new Pishvand::Deca, VahedPaye::Hertz, 1)
   end
 end

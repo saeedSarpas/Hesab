@@ -1,10 +1,6 @@
 struct JomleVahed
-  property prefix, symbol, power
+  property prefix, vahed, power
 
-  def initialize(@prefix : Pishvand, @symbol : Symbol, @power : Int32)
-  end
-
-  def self.from_sym(sym : Symbol)
-    self.new Pishvand::One, sym, 1
+  def initialize(@prefix : Pishvand, @vahed : VahedPaye, @power : Int32)
   end
 end

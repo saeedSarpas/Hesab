@@ -137,4 +137,10 @@ describe Pishvand do
       Pishvand::CONSTS[:Y]?.should eq(Pishvand::Yotta)
     end
   end
+
+  context "Methods" do
+    it "should get the prefix" do
+      Pishvand.get_prefix(:kg).should eq({Pishvand::Kilo, "g"})
+    end
+  end
 end

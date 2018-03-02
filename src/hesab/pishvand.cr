@@ -35,4 +35,14 @@ struct Pishvand
   include Constants
 
   CONSTS = Constants.constants.map { |c| {c.symbol, c} }.to_h
+
+  private CONSTS_KEYS     = CONSTS.keys
+  private CONSTS_KEYS_STR = CONSTS_KEYS.map &.to_s
+
+  def self.get_prefix(sym : Symbol)
+    sym_s = sym.to_s
+    CONSTS_KEYS_STR.index { |c| sym_s.starts_with? c }.try do |idx|
+      {CONSTS[CONSTS_KEYS[idx]], sym_s.lchop(CONSTS_KEYS_STR[idx])}
+    end
+  end
 end

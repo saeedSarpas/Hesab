@@ -1,66 +1,38 @@
 require "../spec_helper"
 
 describe(Bordar) do
-  pending "generates a bordar with a given numeric length and direction" do
-    bordar = Bordar.new 1.23, [1, 2, 3, 4]
-    # b = bordar.instance_variable_get(:@B)
-
-    expect(b[:l]).to be_an(Adad)
-    # expect(b[:l].instance_variable_get(:@A)[:v]).to eq(1.23)
-    expect(b[:d]).to eq([1, 2, 3, 4])
+  it "should be constructible from an Adad and a vector" do
+    Bordar.new(Adad.new(1.23), [1.0, 2.0, 3.0, 4.0]).should be_a(Bordar)
   end
 
-  pending "generates a bordar with a given adad and direction" do
-    bordar = described_class.new Adad.new(1.23), [1, 2, 3, 4]
-    # b = bordar.instance_variable_get(:@B)
-
-    expect(b[:l]).to be_an(Adad)
-    # expect(b[:l].instance_variable_get(:@A)[:v]).to eq(1.23)
-    expect(b[:d]).to eq([1, 2, 3, 4])
+  it "should be constructible by a number and a vector" do
+    Bordar.new(1.23, [1.0, 2.0, 3.0, 4.0]).should be_a(Bordar)
   end
 
-  pending "returns the bordar length by calling length or l method" do
-    expect(Bordar.new(1.23, [] of Object).length).to be_an(Adad)
-    expect(Bordar.new(1.23, [] of Object).l).to be_an(Adad)
-    expect(Bordar.new(1.23, [] of Object).l.v).to eq(1.23)
+  it "should be a struct" do
+    Bordar.new(1.23, [1.0, 2.0, 3.0, 4.0]).is_a?(Struct).should be_true
   end
 
-  pending "returns the bordar direction by calling direction or d method" do
-    expect(Bordar.new(1.23, [0, 1, 2]).direction).to eq([0, 1, 2])
-    expect(Bordar.new(1.23, [0, 1, 2]).d).to eq([0, 1, 2])
+  it "should expose length and l" do
+    bordar = Bordar.new(1.23, [] of Float64)
+
+    bordar.length.should be_a(Adad)
+    bordar.l.should be_a(Adad)
+    bordar.l.v.should eq(1.23)
   end
 
-  pending "clones itself by calling clone method" do
-    bordar = described_class.new 1.23, [0, 1]
-    new_bordar = bordar.clone
-
-    # bordar.instance_variable_get(:@B)[:l] = nil
-    # bordar.instance_variable_get(:@B)[:d] = nil
-
-    expect(new_bordar.l.v).to eq(1.23)
-    expect(new_bordar.d).to eq([0, 1])
+  it "should expose direction and d" do
+    Bordar.new(1.23, [0.0, 1.0, 2.0]).direction.should eq([0.0, 1.0, 2.0])
+    Bordar.new(1.23, [0.0, 1.0, 2.0]).d.should eq([0.0, 1.0, 2.0])
   end
 
-  pending "is able to be multiplied by a number" do
-    bordar = described_class.new 1.23, [0, 1]
-
-    expect((bordar * 2.34).l.v).to eq(1.23 * 2.34)
-    expect((bordar * 2.34).d).to eq([0, 1])
-  end
-
-  pending "is able to be multiplied by a number" do
-    bordar = described_class.new 1.23, [0, 1]
+  it "should be possible to multiply by a number or an Adad" do
+    bordar = Bordar.new 1.23, [0.0, 1.0]
     adad = Adad.new 2.34
 
-    expect((bordar * adad).l.v).to eq(1.23 * 2.34)
-    expect((bordar * adad).d).to eq([0, 1])
-  end
-
-  pending "must be able to generate a symbol based on itself" do
-    bordar = described_class.new 1.23, [0, 1]
-    symb = bordar.symb
-
-    expect(symb).to be_a(Formul)
-    expect(bordar.symb).to be(symb)
+    (bordar * 2.34).l.v.should eq(1.23 * 2.34)
+    (bordar * 2.34).d.should eq([0.0, 1.0])
+    (bordar * adad).l.should eq(bordar.l * adad)
+    (bordar * adad).d.should eq([0.0, 1.0])
   end
 end

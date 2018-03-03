@@ -71,5 +71,9 @@ describe JomleVahed do
     (j1 <=> j3).should eq(-1)
     (j1 <=> j4).should eq(-1)
     (j4 <=> j5).should eq(1)
+    (j1 <= j2).should be_true
+    (j1 < j3).should be_true
+    (j4 >= j1).should be_true
+    (j4 > j5).should be_true
   end
 end

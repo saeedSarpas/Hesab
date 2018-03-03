@@ -19,4 +19,6 @@ struct JomleVahed
     {@prefix.symbol, @vahed.symbol, @power} <=>
       {other.prefix.symbol, other.vahed.symbol, other.power}
   end
+
+  include Comparable(self)
 end

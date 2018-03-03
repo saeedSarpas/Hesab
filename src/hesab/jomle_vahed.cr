@@ -14,4 +14,9 @@ struct JomleVahed
       self.new pish, VahedPaye::CONSTS_STR[v], power
     end
   end
+
+  def <=>(other : self)
+    {@prefix.symbol, @vahed.symbol, @power} <=>
+      {other.prefix.symbol, other.vahed.symbol, other.power}
+  end
 end

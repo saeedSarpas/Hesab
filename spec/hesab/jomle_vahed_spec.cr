@@ -59,4 +59,17 @@ describe JomleVahed do
     JomleVahed.new(:pc, 3).should eq(JomleVahed.new Pishvand::One, VahedPaye::Parsec, 3)
     JomleVahed.new(:daHz, 4).should eq(JomleVahed.new Pishvand::Deca, VahedPaye::Hertz, 4)
   end
+
+  it "should be comparable to other JomleVaheds" do
+    j1 = JomleVahed.new(:kg, 2)
+    j2 = JomleVahed.new(:k, :g, 2)
+    j3 = JomleVahed.new(:one, :g, 2)
+    j4 = JomleVahed.new(:km, 2)
+    j5 = JomleVahed.new(:km, 1)
+
+    (j1 <=> j2).should eq(0)
+    (j1 <=> j3).should eq(-1)
+    (j1 <=> j4).should eq(-1)
+    (j4 <=> j5).should eq(1)
+  end
 end

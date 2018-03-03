@@ -1,273 +1,131 @@
-require "./unit"
+struct Adad
+  property value : Float64
+  property epsilon : Tuple(Float64, Float64)
+  property vahed : Array(JomleVahed)
 
-class Adad
-  # Initializing an instance of Adad
-  #
-  # === Attributes
-  # +value+:: value of the new Adad
-  # +epsilon+:: absolute uncertainty(-ies_ of the Adad) (optional)
-  # +units_and_powers+:: pairs of units and their powers in succession
-  #
-  # ==== Examples
-  # > H = Adad.new 67.48, [0.98], :km, 1, :Mpc, -1, :s, -1
-  # => #<Adad:...>
-  def initialize(value : Float64, epsilon = nil, *units_and_powers)
-    if epsilon.is_a?(Symbol)
-      return initialize(value, nil, epsilon, *units_and_powers)
-    end
-
-    @A = {
-      :v => value,
-      :u => {
-        :L  => ([] of Float64),
-        :M  => ([] of Float64),
-        :T  => ([] of Float64),
-        :Th => ([] of Float64),
-        :N  => ([] of Float64),
-      },
-      :e => [0.0, 0.0],
-    }
-
-    @symb = nil
-
-    unless epsilon.nil?
-      case epsilon.length
-      when 0
-        @A[:e] = [0.0, 0.0]
-      when 1
-        @A[:e] = [epsilon[0], epsilon[0]]
-      when 2
-        @A[:e] = epsilon
-      else
-        raise ArgumentError.new "Don't know how to handle uncertainties"
-      end
-    end
-
-    units_and_powers.each_slice(2) do |(unit, pow)|
-      prfx, symb = Unit.check_for_prfx unit
-
-      Unit::Dim.each do |dim|
-        next unless Unit::UNITS[dim].key? symb
-        @A[:u][dim] << Unit.gen_unit(prfx, symb, pow)
-      end
-
-      Unit::DERIVED[symb].each do |d, us|
-        us.each do |u|
-          @A[:u][d] << Unit.gen_unit(u[:prfx], u[:symb], u[:pow] * pow)
-        end
-      end if Unit::DERIVED.key? symb
-    end
+  def initialize(
+    @value,
+    epsilon : Tuple(Float64) | Tuple(Float64, Float64) = {0.0, 0.0},
+    @vahed = [] of JomleVahed
+  )
+    @epsilon = epsilon.is_a?(Tuple(Float64)) ? {epsilon[0], epsilon[0]} : epsilon
   end
 
-  # Returns the value of the number
-  def value
-    @A[:v]
+  def self.new(
+    value : Float64,
+    epsilon : Tuple(Float64) | Tuple(Float64, Float64) = {0.0, 0.0},
+    **expr : Int32
+  )
+    epsilon = epsilon.is_a?(Tuple(Float64)) ? {epsilon[0], epsilon[0]} : epsilon
+    vahed = [] of JomleVahed
+    expr.each { |s, v| vahed << JomleVahed.new s, v }
+    self.new value, epsilon, vahed
   end
 
   def v
-    self.value
+    @value
   end
 
-  # Returns the unit of the number
-  def unit
-    unit = "["
-    @A[:u].each do |_, us|
-      us.each do |u|
-        unit += " #{u[:prfx] unless u[:prfx] == :one}#{u[:symb]}"
-        unit += "^#{u[:pow]}" unless u[:pow] == 1
-      end
-    end
-    unit += " ]"
-  end
-
-  def u
-    self.unit
-  end
-
-  # Returns uncertainties
   def e
-    @A[:e]
+    @epsilon
   end
 
-  # Cloning
-  # def clone
-  #   adad = Adad.new @A[:v]
-  #   adad.instance_variable_get(:@A)[:u] = Marshal.load(Marshal.dump(@A[:u]))
-  #   adad.instance_variable_get(:@A)[:e] = Marshal.load(Marshal.dump(@A[:e]))
-  #   return adad
-  # end
-
-  # Check if a given unit have the same dimension of the self unit
-  #
-  # === Attributes
-  # +adad+:: a given Adad
-  def same_dimension?(adad)
-    pows = ->(us) do
-      return us.map { |u| u[:pow] }.reduce(:+) || 0
-    end
-
-    us = nil # adad.instance_variable_get(:@A)[:u]
-    Unit::Dim.each { |d| return false unless pows(@A[:u][d]) == pows(us[d]) }
+  def vahed_str
+    "[" +
+      vahed.map do |v|
+        " #{v.prefix.one? ? "" : v.prefix.symbol}#{v.vahed.symbol}" +
+          ((v.power == 1) ? "" : "^#{v.power}")
+      end.join +
+      " ]"
   end
 
-  # Addition
-  #
-  # === Attributes
-  # +s+:: a given summand of type Adad
-  def +(s, mod = 1)
-    raise ArgumentError unless s.is_a? Adad
-    raise ArgumentError unless self.same_dimension? s
-
-    adad, a = _clone_self
-    s_a = nil # s.instance_variable_get(:@A)
-    conv_fact = _factor_to_SI(s) / _factor_to_SI(self)
-
-    a[:v] += s_a[:v] * conv_fact * mod
-    [0, 1].each { |i| a[:e][i] += conv_fact * s_a[:e][i] }
-
-    return adad
+  def vstr
+    self.vahed_str
   end
 
-  # Subtracting by an Adad
-  #
-  # === Attributes
-  # +s+:: a given subtrahend of type Adad
-  def -(s)
-    self.+(s, -1)
-  end
-
-  # Multiplying by an Adad or a Numeric value
-  #
-  # === Attributes
-  # +m+:: multiplicand of type Adad or Numeric
-  #
-  # TODO: use coerce to be able to run scalar * Adad
-  def *(m, mod = 1)
-    adad, a = _clone_self
-
-    if m.is_a?(Numeric)
-      a[:v] *= m**mod
-      a[:e] = a[:e].collect { |e| e*m**mod }
-    elsif m.is_a?(Adad)
-      m_A = nil # m.instance_variable_get(:@A)
-
-      [0, 1].each { |i| a[:e][i] = m_A[:v] * a[:e][i] + a[:v] * m_A[:e][i] }
-
-      a[:v] *= m_A[:v]**mod
-
-      m_A[:u].each do |d, m_us|
-        m_us.each do |m_u|
-          a[:u][d] << Unit.gen_unit(m_u[:prfx], m_u[:symb], m_u[:pow] * mod)
+  def abaad : Hash(Abaad, Int32)
+    a = ({} of Abaad => Int32)
+    @vahed.each do |v|
+      v.vahed.abaad.each do |abaad, power|
+        r = power * v.power
+        if a.has_key? abaad
+          a[abaad] += r
+        else
+          a[abaad] = r
         end
       end
     end
-
-    return adad
+    a
   end
 
-  # Division by an Adad or a Numeric value
-  #
-  # === Attributes
-  # +d+:: divisor of type Adad or Numeric
-  def /(d)
-    self.*(d, -1)
+  def same_dimension?(other : self)
+    self.abaad == other.abaad
   end
 
-  # Exponentiation by a scalar (of type Numeric)
-  #
-  # === Attributes
-  # +ex+:: exponent of type Numeric
-  def **(ex)
-    raise ArgumentError unless ex.is_a?(Numeric)
-
-    adad, a = _clone_self
-
-    a[:v] **= ex
-    a[:u].each { |_, us| us.each { |u| u[:pow] *= ex } }
-    [0, 1].each { |i| a[:e][i] *= ex }
-
-    return adad
+  def same_vahed?(other : self)
+    self.vahed.sort == other.vahed.sort
   end
 
-  # Simplify units by canceling similar dimensions (if present)
-  def simplify!
-    Unit::Dim.each do |dim|
-      next if @A[:u][dim].length <= 1
-
-      sum_pows = @A[:u][dim].map { |u| u[:pow] }.reduce(:+)
-      @A[:u][dim].each { |u| @A[:v] *= Unit.conv_fact(u) }
-
-      if sum_pows == 0
-        @A[:u][dim] = [] of Object
-      else
-        def_u = Unit::UNITS[dim][:default]
-        @A[:u][dim] = [Unit.gen_unit(def_u[:prfx], def_u[:symb], sum_pows)]
-        @A[:v] /= Unit.conv_fact(def_u)
-      end
+  def +(other : self)
+    unless self.same_vahed? other
+      raise ArgumentError.new "Operands to + must have same units!" +
+                              " '#{self.vstr}' and '#{other.vstr}'"
     end
 
-    return @A[:u]
+    value = @value + other.value
+    e0 = @epsilon[0] + other.e[0]
+    e1 = @epsilon[1] + other.e[1]
+
+    self.class.new value, {e0, e1}, @vahed
   end
 
-  # Returns a converted Adad with a new given unit
-  #
-  # === Attributes
-  # +units_and_powers+:: pairs of units and their powers in succession
-  # TODO: Check if dimensions match
-  def to(*units_and_powers)
-    adad, a = _clone_self
-
-    Unit::Dim.each do |dim|
-      a[:u][dim].each { |u| a[:v] *= Unit.conv_fact(u) }
-      a[:u][dim] = [] of Object
-    end
-
-    units_and_powers.each_slice(2) do |unit, pow|
-      prfx, symb = Unit.check_for_prfx unit
-
-      Unit::Dim.each do |dim|
-        next unless Unit::UNITS[dim].key? symb
-
-        u = Unit.gen_unit(prfx, symb, pow)
-
-        a[:v] /= Unit.conv_fact(u)
-        a[:u][dim] << u
-      end
-
-      Unit::DERIVED[symb].each do |d, us|
-        us.each do |u|
-          a[:v] /= Unit.conv_fact(u)
-          a[:u][d] << Unit.gen_unit(u[:prfx], u[:symb], u[:pow] * pow)
-        end
-      end if Unit::DERIVED.key? symb
-    end
-
-    return adad
+  def -(other : self)
+    self + (other * -1)
   end
 
-  # Generating a symbol version of the adad
-  def symb
-    return @symb unless @symb.nil?
-
-    @symb = Formul.new self
-    @symb
+  # TODO: error handling code is **WRONG**!!!
+  def *(other : Number)
+    value = @value * other
+    e0 = @epsilon[0] * other.abs
+    e1 = @epsilon[1] * other.abs
+    self.class.new value, {e0, e1}, @vahed
   end
 
-  # private
+  def *(other : self)
+    value = @value * other.value
 
-  # Returns a cloned version of self alongside of pointer to the @A of the clone
-  def _clone_self
-    adad = self.clone
-    return adad, nil # adad.instance_variable_get(:@A)
+    e0 = other.value.abs * @epsilon[0] + @value.abs * other.e[0]
+    e1 = other.value.abs * @epsilon[1] + @value.abs * other.e[1]
+
+    vahed = @vahed + other.vahed
+
+    self.class.new value, {e0, e1}, vahed
   end
 
-  # Returns the SI conversion factor (only a Numeric)
-  #
-  # === Attributes
-  # +adad+:: a given adad
-  def _factor_to_SI(adad)
-    # adad.instance_variable_get(:@A)[:u].map { |_,us|
-    #   us.map { |u| Unit::conv_fact(u) }
-    # }.flatten.reduce :*
+  def /(other : Number)
+    value = @value / other
+    e0 = @epsilon[0] / other.abs
+    e1 = @epsilon[1] / other.abs
+    self.class.new value, {e0, e1}, @vahed
+  end
+
+  def /(other : self)
+    value = @value / other.value
+
+    e0 = other.value.abs * @epsilon[0] + @value.abs * other.e[0]
+    e1 = other.value.abs * @epsilon[1] + @value.abs * other.e[1]
+
+    vahed = @vahed + other.vahed.map { |v| JomleVahed.new v.prefix, v.vahed, -v.power }
+
+    self.class.new value, {e0, e1}, vahed
+  end
+
+  def **(exp : Int32)
+    value = @value ** exp
+    e0 = @epsilon[0] * exp
+    e1 = @epsilon[1] * exp
+    vahed = @vahed.map { |v| JomleVahed.new v.prefix, v.vahed, v.power*exp }
+
+    self.class.new value, {e0, e1}, vahed
   end
 end

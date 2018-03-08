@@ -200,13 +200,13 @@ class Adad
       if sum_pows == 0
         @A[:u][dim] = []
       else
-        def_u = Unit:UNITS[dim][:default]
+        def_u = Unit::UNITS[dim][:default]
         @A[:u][dim] = [Unit::gen_unit(def_u[:prfx], def_u[:symb], sum_pows)]
         @A[:v] /= Unit::conv_fact(def_u)
       end
     end
 
-    return @A[:u]
+    return self
   end
 
 

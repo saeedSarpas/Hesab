@@ -10,6 +10,14 @@ describe(Bordar) do
     expect(b[:d]).to eq([1, 2, 3, 4])
   end
 
+  it 'can generate a bordar with nil length' do
+    bordar = described_class.new nil, [1,2,3]
+    expect(bordar).to be_a(Bordar)
+
+    b = bordar.instance_variable_get(:@B)
+    expect(b[:l].instance_variable_get(:@A)[:v]).to be_nil
+  end
+
   it 'generates a bordar with a given adad and direction' do
     bordar = described_class.new Adad.new(1.23), [1, 2, 3, 4]
     b = bordar.instance_variable_get(:@B)
@@ -56,11 +64,15 @@ describe(Bordar) do
     expect((bordar * adad).d).to eq([0, 1])
   end
 
-  it 'must be able to generate a symbol based on itself' do
+  it 'can generate a symbol based on itself' do
     bordar = described_class.new 1.23, [0, 1]
     symb = bordar.symb
 
     expect(symb).to be_a(Formul)
     expect(bordar.symb).to be(symb)
+    expect(bordar.l.v).to eq(1.23)
+
+    bordar.l.instance_variable_get(:@A)[:v] = 2.34
+    expect(bordar.l.v).to eq(2.34)
   end
 end

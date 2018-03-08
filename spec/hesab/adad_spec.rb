@@ -11,6 +11,12 @@ describe(Adad) do
     expect(a[:e]).to eq([0.0, 0.0])
   end
 
+  it 'can generate an adad with nil value' do
+    adad = described_class.new(nil, :km, 1)
+    expect(adad).to be_an(Adad)
+    expect(adad.instance_variable_get(:@A)[:v]).to be_nil
+  end
+
   it 'generates a new adad with a number and its units' do
     adad = described_class.new 1.23, :km, 1
     a = adad.instance_variable_get(:@A)
@@ -184,11 +190,15 @@ describe(Adad) do
     expect(reverted.v).to eq(1.0)
   end
 
-  it 'must be able to generate a symbol based on itself' do
+  it 'can generate a symbol based on itself' do
     adad = described_class.new 1.23, :km, 1
     symb = adad.symb
 
     expect(symb).to be_a(Formul)
     expect(adad.symb).to be(symb)
+    expect(adad.symb.instance_variable_get(:@F).v).to eq(1.23)
+
+    adad.instance_variable_get(:@A)[:v] = 2.34
+    expect(adad.symb.instance_variable_get(:@F).v).to eq(2.34)
   end
 end

@@ -87,13 +87,13 @@ describe(Formul) do
   it 'should be able to handle nested cases' do
     c = Adad.new 2.998e8, :m, 1, :s, -1
     m = Adad.new 1.0, :kg, 1
-    p = Adad.new 1.0, :kg, 1, :m, 1, :s, -1
+    p = Bordar.new Adad.new(nil, :kg, 1, :m, 1, :s, -1), [0, 1]
 
-    E2 = (m.symb * c.symb**2)**2 + (p.symb * c.symb)**2
+    E2 = (m.symb * c.symb**2)**2 + (p.l.symb * c.symb)**2
 
     c_f = c.symb.instance_variable_get(:@F)
     m_f = m.symb.instance_variable_get(:@F)
-    p_f = p.symb.instance_variable_get(:@F)
+    p_f = p.l.symb.instance_variable_get(:@F)
 
     expect(E2).to be_a(Formul)
 
